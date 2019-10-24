@@ -1,5 +1,6 @@
 package com.scoprorject.rsccomponent
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,8 +9,6 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private val compositeDisposable = CompositeDisposable()
-
     lateinit var itemLoanInfoComponent: ItemLoanInfoComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,16 +25,10 @@ class MainActivity : AppCompatActivity() {
 
         itemLoanInfoComponent.itemLoanInfoInput.onNext(data)
 
-        compositeDisposable.add(
-            itemLoanInfoComponent.btnTableOnClick.subscribe {
-                Toast.makeText(this@MainActivity, "Hello Bro", Toast.LENGTH_LONG).show()
-
+        itemLoanInfoComponent.btnTableCicilanOnClick.subscribe {
+            Intent(this@MainActivity, InstallmentTableActivity::class.java).run {
+                startActivity(this)
             }
-        )
-    }
-
-    override fun onDestroy() {
-        itemLoanInfoComponent.onDetachView()
-        super.onDestroy()
+        }
     }
 }

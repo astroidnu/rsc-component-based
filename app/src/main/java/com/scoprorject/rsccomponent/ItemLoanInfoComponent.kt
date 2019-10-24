@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.android.synthetic.main.item_two_line.view.*
@@ -12,10 +13,9 @@ import kotlinx.android.synthetic.main.item_two_line.view.*
  * Created by ibnumuzzakkir on 22,October,2019
  */
 
-class ItemLoanInfoComponent (private val container: ViewGroup) {
-    val compositeDisposable = CompositeDisposable()
-    val btnTableOnClick: PublishSubject<Boolean> =   PublishSubject.create<Boolean>()
+class ItemLoanInfoComponent (container: ViewGroup) {
     val itemLoanInfoInput: PublishSubject<ComponentItemLoan.Input> =   PublishSubject.create<ComponentItemLoan.Input>()
+    val btnTableCicilanOnClick: PublishSubject<ComponentItemLoan> =   PublishSubject.create<ComponentItemLoan>()
 
 
     private val presenter: ItemLoanInfoPresenter by lazy {
@@ -35,22 +35,16 @@ class ItemLoanInfoComponent (private val container: ViewGroup) {
         container.addView(uiView)
 
         btnTabelCicilan.setOnClickListener {
-            btnTableOnClick.onNext(true)
+            btnTableCicilanOnClick.onNext(ComponentItemLoan.InstallmentTableOnClick)
         }
 
-        compositeDisposable.add(
-            itemLoanInfoInput.subscribe { data ->
-                val status = presenter.checkStatusPinjaman(data.isIndebt ?: false)
-                tvStatusPinjaman.text = status
-                tvPembayaran.text = data.pembayaran
-                tvPeriodePinjaman.text = data.periodePinjaman
-                tvJumlahPinjaman.text = data.jmlPinjaman
-            }
-        )
-    }
-
-    fun onDetachView() {
-        compositeDisposable.clear()
+        itemLoanInfoInput.subscribe { data ->
+            val status = presenter.checkStatusPinjaman(data.isIndebt ?: false)
+            tvStatusPinjaman.text = status
+            tvPembayaran.text = data.pembayaran
+            tvPeriodePinjaman.text = data.periodePinjaman
+            tvJumlahPinjaman.text = data.jmlPinjaman
+        }
     }
 }
 
@@ -59,4 +53,6 @@ sealed class ComponentItemLoan {
                      var periodePinjaman : String?,
                      var pembayaran : String?,
                      var isIndebt: Boolean?)
+
+    object InstallmentTableOnClick : ComponentItemLoan()
 }
