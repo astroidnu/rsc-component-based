@@ -1,6 +1,6 @@
 package com.scoprorject.rsccomponent.core
 
-import io.reactivex.rxjava3.core.Observable
+import io.reactivex.Observable
 
 
 interface UIComponent<T> {
