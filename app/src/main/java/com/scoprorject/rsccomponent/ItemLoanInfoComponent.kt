@@ -45,7 +45,6 @@ class ItemLoanInfoComponent (container: ViewGroup,private val bus: EventBusFacto
             tvPeriodePinjaman.text = data.periodePinjaman
             tvJumlahPinjaman.text = data.jmlPinjaman
         }
-
         btnTabelCicilan.setOnClickListener {
             bus.emit(ComponentItemLoan::class.java, ComponentItemLoan.InstallmentTableOnClick)
         }
