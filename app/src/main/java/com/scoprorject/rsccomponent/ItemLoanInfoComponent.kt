@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import com.jakewharton.rxbinding3.view.clicks
 import com.scoprorject.rsccomponent.core.ComponentEvent
 import com.scoprorject.rsccomponent.core.EventBusFactory
 import com.scoprorject.rsccomponent.core.UIComponent
@@ -45,11 +46,13 @@ class ItemLoanInfoComponent (container: ViewGroup,private val bus: EventBusFacto
             tvPeriodePinjaman.text = data.periodePinjaman
             tvJumlahPinjaman.text = data.jmlPinjaman
         }
-        btnTabelCicilan.setOnClickListener {
-            bus.emit(ComponentItemLoan::class.java, ComponentItemLoan.InstallmentTableOnClick)
-        }
 
-
+        btnTabelCicilan
+            .clicks()
+            .doOnNext {
+                bus.emit(ComponentItemLoan::class.java, ComponentItemLoan.InstallmentTableOnClick)
+            }
+            .subscribe()
     }
 }
 
